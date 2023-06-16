@@ -3,11 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../../store/auth/authSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { RootState } from '../../store/auth';
+import Button from '../Button/Button';
+import Input from '../Input/Input';
+import BottomNavigation from '../Button/BottomNavigation';
 
 const LoginForm: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector((state: RootState) => state.auth.user);
+  const users = useSelector((state: RootState) => state.auth.users);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -18,7 +21,8 @@ const LoginForm: React.FC = () => {
       return;
     }
 
-    if (!user || (user.email !== email && user.password !== password)) {
+    const user = users.find((user) => user.email === email && user.password === password);
+    if (!user) {
       setError('Invalid email or password');
       return;
     }
@@ -28,38 +32,28 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center">
-      <h2 className="text-3xl font-bold mb-8">Login</h2>
-      <div className="bg-white p-8 rounded shadow-md w-80">
+    <>
+      <h2 className="title">Login</h2>
+      <div className="box">
         <form className="space-y-4">
-          <input
+          <Input
             type="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="border border-gray-300 rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <input
+          <Input
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="border border-gray-300 rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <button
-            type="button"
-            onClick={handleLogin}
-            className="bg-blue-500 text-white rounded px-4 py-2 w-full focus:outline-none hover:bg-blue-600"
-          >
-            Login
-          </button>
+          <Button onClick={handleLogin}>Login</Button>
           {error && <p className="text-red-500">{error}</p>}
         </form>
-        <div className="mt-4">
-          <Link to="/signup" className="text-blue-500 underline">Signup</Link>
-        </div>
+        <BottomNavigation path="/signup">Signup</BottomNavigation>
       </div>
-    </div>
+    </>
   );
 };
 

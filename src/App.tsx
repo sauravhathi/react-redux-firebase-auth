@@ -12,17 +12,19 @@ const App: React.FC = () => {
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LoginForm />} />
-        <Route path="/login" element={<LoginForm />} />
-        <Route path="/signup" element={<SignupForm />} />
-        {isAuthenticated ?
-          <Route path="/welcome" element={<WelcomePage />} /> :
-          <Route path="/welcome" element={<Navigate to="/login" />} />
-        }
-      </Routes>
-    </Router>
+    <div className="container">
+      <Router>
+        <Routes>
+          <Route path="/" element={<LoginForm />} />
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/signup" element={<SignupForm />} />
+          {isAuthenticated ?
+            <Route path="/welcome" element={<WelcomePage />} /> :
+            <Route path="/welcome" element={<Navigate to="/login" />} />
+          }
+        </Routes>
+      </Router>
+    </div>
   );
 };
 

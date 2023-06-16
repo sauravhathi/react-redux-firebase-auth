@@ -6,13 +6,15 @@ interface User {
 }
 
 interface AuthState {
-  user: User | null;
+  users: User[];
   isAuthenticated: boolean;
+  currentUser: User | null;
 }
 
 const initialState: AuthState = {
-  user: null,
+  users: [],
   isAuthenticated: false,
+  currentUser: null,
 };
 
 const authSlice = createSlice({
@@ -21,25 +23,27 @@ const authSlice = createSlice({
   reducers: {
     login(state, action: PayloadAction<{ email: string; password: string }>) {
       const { email, password } = action.payload;
-      if (email === state.user?.email && password === state.user?.password) {
-        state.user = {
-          email,
-          password,
-        };
+      const user = state.users.find(
+        (user) => user.email === email && user.password === password
+      );
+      if (user) {
+        state.currentUser = user;
         state.isAuthenticated = true;
       }
     },
     signup(state, action: PayloadAction<{ email: string; password: string }>) {
       const { email, password } = action.payload;
 
-      state.user = {
+      const newUser: User = {
         email,
         password,
       };
+
+      state.users.push(newUser);
       state.isAuthenticated = false;
     },
     logout(state) {
-      state.user = null;
+      state.currentUser = null;
       state.isAuthenticated = false;
     },
   },

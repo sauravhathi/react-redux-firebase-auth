@@ -1,6 +1,6 @@
 # React Redux Login Signup
 
-Simple Login Signup application using React and Redux.
+Simple Login Signup application using React, Redux, Firebase and Material-UI.
 
 ## Demo
 
